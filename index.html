@@ -8,10 +8,29 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="landing">
-        <h1>snitheads</h1>
+    <!-- Room Container -->
+    <div id="room-container">
+        <img id="room-image" src="images/room.png" alt="Room">
+        <div id="hotspot-overlay">
+            <!-- Hotspots will be added by JavaScript -->
+        </div>
+        <div id="room-title">
+            <h1>snitheads</h1>
+        </div>
     </div>
-    <div id="character-container"></div>
-    <script src="js/characters.js"></script>
+
+    <!-- Section Container -->
+    <div id="section-container" class="hidden">
+        <button id="back-to-room" aria-label="Back to room">
+            <span class="back-arrow"></span>
+            <span>Back</span>
+        </button>
+        <div id="section-content"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/camera-parallax.js"></script>
+    <script src="js/hotspots.js"></script>
+    <script src="js/navigation.js"></script>
 </body>
 </html>

@@ -7,7 +7,11 @@
       "Bash(nslookup:*)",
       "Bash(curl:*)",
       "Bash(timeout:*)",
-      "Bash(ping:*)"
+      "Bash(ping:*)",
+      "Bash(wsl stat:*)",
+      "Bash(powershell -command \"\\(Get-Item ''c:\\\\Users\\\\jacob\\\\Documents\\\\GitHub\\\\snitheads-website\\\\images\\\\background.png''\\).Length\")",
+      "Bash(ls -la \"c:\\\\Users\\\\jacob\\\\Documents\\\\GitHub\\\\snitheads-website\\\\js\"\" 2>/dev/null || dir \"c:UsersjacobDocumentsGitHubsnitheads-websitejs\"\")",
+      "Bash(ls -la \"c:\\\\Users\\\\jacob\\\\Documents\\\\GitHub\\\\snitheads-website\\\\css\"\" 2>/dev/null || dir \"c:UsersjacobDocumentsGitHubsnitheads-websitecss\"\")"
     ]
   }
 }
