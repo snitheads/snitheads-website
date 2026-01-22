@@ -348,6 +348,12 @@ class YouTubeIntegration {
     }
 
     switchVideo(videoId) {
+        // Always scroll to top when a video is clicked
+        const sectionContainer = document.getElementById('section-container');
+        if (sectionContainer) {
+            sectionContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         if (videoId === this.currentVideoId) return;
 
         this.currentVideoId = videoId;
@@ -376,12 +382,6 @@ class YouTubeIntegration {
                 existingBadge.remove();
             }
         });
-
-        // Scroll to top of section to see the player
-        const sectionContent = document.getElementById('section-content');
-        if (sectionContent) {
-            sectionContent.scrollTo({ top: 0, behavior: 'smooth' });
-        }
     }
 
     async retry() {
