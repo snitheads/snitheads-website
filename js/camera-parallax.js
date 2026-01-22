@@ -8,6 +8,7 @@
 
     let roomImage = null;
     let hotspotOverlay = null;
+    let tvPlayerContainer = null;
 
     // Current and target positions
     let currentX = 0;
@@ -18,6 +19,7 @@
     function init() {
         roomImage = document.getElementById('room-image');
         hotspotOverlay = document.getElementById('hotspot-overlay');
+        tvPlayerContainer = document.getElementById('tv-player-container');
         if (!roomImage) return;
 
         // Track mouse movement on the room container
@@ -63,6 +65,9 @@
         }
         if (hotspotOverlay) {
             hotspotOverlay.style.transform = transform;
+        }
+        if (tvPlayerContainer) {
+            tvPlayerContainer.style.transform = transform;
         }
 
         requestAnimationFrame(animate);

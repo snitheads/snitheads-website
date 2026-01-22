@@ -26,19 +26,15 @@ const SECTION_CONTENT = {
         content: `
             <h2>Cartoons</h2>
             <p>Watch our animated creations. From short films to series, explore the world of Snitheads animation.</p>
-            <div class="section-grid">
-                <div class="section-item">
-                    <div class="item-placeholder">Coming Soon</div>
-                    <h3>Cartoon 1</h3>
-                    <p>Description of the first cartoon.</p>
-                </div>
-                <div class="section-item">
-                    <div class="item-placeholder">Coming Soon</div>
-                    <h3>Cartoon 2</h3>
-                    <p>Description of the second cartoon.</p>
-                </div>
+            <div id="cartoons-content">
+                <!-- Videos loaded dynamically by youtube-integration.js -->
             </div>
-        `
+        `,
+        onLoad: () => {
+            if (window.youtubeIntegration) {
+                window.youtubeIntegration.initialize();
+            }
+        }
     },
     contact: {
         title: 'Contact',
@@ -120,6 +116,12 @@ class NavigationController {
         this.sectionContent.innerHTML = SECTION_CONTENT[sectionId].content;
         this.sectionContent.classList.add('section-enter');
 
+        // Call onLoad callback if exists
+        const sectionConfig = SECTION_CONTENT[sectionId];
+        if (sectionConfig.onLoad && typeof sectionConfig.onLoad === 'function') {
+            sectionConfig.onLoad();
+        }
+
         // Show section container
         this.sectionContainer.classList.remove('fully-hidden');
         requestAnimationFrame(() => {
@@ -140,6 +142,12 @@ class NavigationController {
         if (this.isTransitioning || !this.currentSection) return;
 
         this.isTransitioning = true;
+
+        // Stop any playing video in the section
+        if (window.youtubeIntegration) {
+            window.youtubeIntegration.stopFeaturedPlayer();
+        }
+
         this.sectionContent.classList.add('section-exit');
 
         // Update URL
@@ -159,6 +167,11 @@ class NavigationController {
             this.sectionContent.classList.remove('section-exit');
             this.currentSection = null;
             this.isTransitioning = false;
+
+            // Resume TV player when returning to room
+            if (window.youtubeIntegration) {
+                window.youtubeIntegration.resumeTVPlayer();
+            }
         }, 400);
     }
 
