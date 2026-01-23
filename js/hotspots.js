@@ -24,15 +24,15 @@ const HOTSPOTS = [
         description: 'Play our games'
     },
     {
-        id: 'contact',
-        label: 'Contact',
-        section: 'contact',
+        id: 'music',
+        label: 'Music',
+        section: 'music',
         x: 80,
         y: 40,
         width: 90,
         height: 120,
-        icon: '📱',
-        description: 'Get in touch'
+        icon: '🎵',
+        description: 'Listen to music'
     }
 ];
 
