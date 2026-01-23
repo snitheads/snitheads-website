@@ -266,8 +266,4 @@ function initNavigation() {
     navigationController = new NavigationController();
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNavigation);
-} else {
-    initNavigation();
-}
+window.DOMUtils.onReady(initNavigation);

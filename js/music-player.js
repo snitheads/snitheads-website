@@ -64,12 +64,7 @@ class MusicPlayer {
     }
 
     async probeFile(path) {
-        try {
-            const response = await fetch(path, { method: 'HEAD' });
-            return response.ok;
-        } catch {
-            return false;
-        }
+        return await window.DOMUtils.probeFile(path);
     }
 
     async readMetadata(path, ext) {
@@ -343,10 +338,7 @@ class MusicPlayer {
     }
 
     formatTime(seconds) {
-        if (!seconds || isNaN(seconds)) return '0:00';
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
+        return window.Formatters.formatTime(seconds);
     }
 
     onTrackEnd() {

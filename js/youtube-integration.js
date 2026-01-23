@@ -13,6 +13,7 @@ const RSS2JSON_API = 'https://api.rss2json.com/v1/api.json';
 class YouTubeIntegration {
     constructor(config = YOUTUBE_CONFIG) {
         this.config = config;
+        this.cacheManager = new window.CacheManager(config.cacheKey, config.cacheDuration);
         this.videos = [];
         this.currentVideoId = null;
         this.isLoading = false;
@@ -28,7 +29,7 @@ class YouTubeIntegration {
 
     async fetchVideos() {
         // Check cache first
-        const cached = this.getFromCache();
+        const cached = this.cacheManager.get();
         if (cached) {
             this.videos = cached;
             return this.videos;
@@ -60,7 +61,7 @@ class YouTubeIntegration {
                 link: item.link
             }));
 
-            this.saveToCache(this.videos);
+            this.cacheManager.set(this.videos);
 
         } catch (err) {
             this.error = err.message;
@@ -86,52 +87,6 @@ class YouTubeIntegration {
         const stripped = desc.replace(/<[^>]*>/g, '');
         if (stripped.length <= maxLength) return stripped;
         return stripped.substring(0, maxLength).trim() + '...';
-    }
-
-    getFromCache() {
-        try {
-            const cached = localStorage.getItem(this.config.cacheKey);
-            if (!cached) return null;
-
-            const { timestamp, videos } = JSON.parse(cached);
-            if (Date.now() - timestamp > this.config.cacheDuration) {
-                localStorage.removeItem(this.config.cacheKey);
-                return null;
-            }
-
-            // Restore Date objects
-            return videos.map(v => ({
-                ...v,
-                publishedAt: new Date(v.publishedAt)
-            }));
-        } catch {
-            return null;
-        }
-    }
-
-    saveToCache(videos) {
-        try {
-            localStorage.setItem(this.config.cacheKey, JSON.stringify({
-                timestamp: Date.now(),
-                videos
-            }));
-        } catch {
-            // localStorage might be full or disabled
-        }
-    }
-
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    formatDate(date) {
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
     }
 
     // ==========================================
@@ -174,7 +129,6 @@ class YouTubeIntegration {
         await this.fetchVideos();
 
         if (this.videos.length === 0) {
-            console.log('No videos available for TV player');
             return;
         }
 
@@ -241,15 +195,7 @@ class YouTubeIntegration {
             </div>
             <h3 class="video-grid-title">All Cartoons</h3>
             <div class="section-grid">
-                ${Array(6).fill().map(() => `
-                    <div class="section-item video-item loading">
-                        <div class="video-thumbnail-container">
-                            <div class="loading-pulse"></div>
-                        </div>
-                        <h3 class="loading-text-title"></h3>
-                        <p class="loading-text-date"></p>
-                    </div>
-                `).join('')}
+                ${window.UIHelpers.generateSkeletonHTML(6, 'video')}
             </div>
         `;
     }
@@ -310,7 +256,7 @@ class YouTubeIntegration {
                         <div class="video-thumbnail-container">
                             <img
                                 src="${video.thumbnail}"
-                                alt="${this.escapeHtml(video.title)}"
+                                alt="${window.DOMUtils.escapeHtml(video.title)}"
                                 class="video-thumbnail"
                                 loading="lazy"
                             />
@@ -319,8 +265,8 @@ class YouTubeIntegration {
                             </div>
                             ${video.id === this.currentVideoId ? '<span class="now-playing-badge">Now Playing</span>' : ''}
                         </div>
-                        <h3>${this.escapeHtml(video.title)}</h3>
-                        <p class="video-date">${this.formatDate(video.publishedAt)}</p>
+                        <h3>${window.DOMUtils.escapeHtml(video.title)}</h3>
+                        <p class="video-date">${window.Formatters.formatDate(video.publishedAt)}</p>
                     </div>
                 `).join('')}
             </div>
@@ -350,9 +296,7 @@ class YouTubeIntegration {
     switchVideo(videoId) {
         // Always scroll to top when a video is clicked
         const sectionContainer = document.getElementById('section-container');
-        if (sectionContainer) {
-            sectionContainer.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.DOMUtils.scrollToTop(sectionContainer);
 
         if (videoId === this.currentVideoId) return;
 
@@ -364,28 +308,13 @@ class YouTubeIntegration {
             iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
         }
 
-        // Update now-playing states in grid
-        document.querySelectorAll('.video-item').forEach(item => {
-            const isPlaying = item.dataset.videoId === videoId;
-            item.classList.toggle('now-playing', isPlaying);
-
-            // Update badge
-            const container = item.querySelector('.video-thumbnail-container');
-            const existingBadge = container.querySelector('.now-playing-badge');
-
-            if (isPlaying && !existingBadge) {
-                const badge = document.createElement('span');
-                badge.className = 'now-playing-badge';
-                badge.textContent = 'Now Playing';
-                container.appendChild(badge);
-            } else if (!isPlaying && existingBadge) {
-                existingBadge.remove();
-            }
-        });
+        // Update now-playing badges using helper
+        const container = document.getElementById('cartoons-content');
+        window.UIHelpers.toggleNowPlayingBadge(container, '.video-item', videoId, 'videoId');
     }
 
     async retry() {
-        localStorage.removeItem(this.config.cacheKey);
+        this.cacheManager.clear();
         this.error = null;
         await this.initialize();
     }
@@ -417,10 +346,6 @@ class YouTubeIntegration {
 window.youtubeIntegration = new YouTubeIntegration();
 
 // Initialize TV player when page loads
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        window.youtubeIntegration.initTVPlayer();
-    });
-} else {
+window.DOMUtils.onReady(() => {
     window.youtubeIntegration.initTVPlayer();
-}
+});

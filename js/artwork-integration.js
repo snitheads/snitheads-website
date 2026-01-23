@@ -11,20 +11,14 @@ class ArtworkIntegration {
     }
 
     async initialize() {
-        console.log('ArtworkIntegration.initialize() called');
         const pixContent = document.getElementById('pix-content');
-        console.log('pix-content element:', pixContent);
-        if (!pixContent) {
-            console.error('pix-content element not found!');
-            return;
-        }
+        if (!pixContent) return;
 
         this.containerElement = pixContent;
         this.isLoading = true;
 
         // Show loading state
         this.renderLoadingState();
-        console.log('Loading state rendered');
 
         // Discover artwork files
         await this.discoverArtwork();
@@ -46,13 +40,11 @@ class ArtworkIntegration {
         const basePath = 'images/artwork/';
 
         // First, try to load a manifest if it exists
-        console.log('Attempting to load manifest.json...');
         try {
             const response = await fetch(basePath + 'manifest.json', { cache: 'no-store' });
             if (response.ok) {
                 const data = await response.json();
                 const files = data.files || [];
-                console.log('Manifest loaded with files:', files);
 
                 for (const file of files) {
                     const item = this.createArtworkItem(file);
@@ -60,26 +52,23 @@ class ArtworkIntegration {
                         this.artwork.push(item);
                     }
                 }
-                console.log('Loaded artwork from manifest.json:', this.artwork);
                 return;
             }
         } catch (error) {
-            console.warn('Could not load manifest.json:', error.message);
+            // Manifest not found, fall through to probing
         }
 
         // Fallback: Probe for files sequentially
-        console.log('Manifest not found. Probing for artwork files in ' + basePath);
         for (let i = 1; i <= 50; i++) {
             let found = false;
             for (const ext of extensions) {
                 const filename = `${i}.${ext}`;
                 const path = basePath + filename;
-                const exists = await this.probeFile(path);
+                const exists = await window.DOMUtils.probeFile(path);
                 if (exists) {
                     const item = this.createArtworkItem(filename);
                     if (item) {
                         this.artwork.push(item);
-                        console.log('Found artwork:', filename);
                     }
                     found = true;
                     break; // Move to next number
@@ -89,23 +78,6 @@ class ArtworkIntegration {
                 // Stop probing if we've scanned ahead without finding anything
                 break;
             }
-        }
-        console.log('Discovery complete. Found ' + this.artwork.length + ' artwork files:', this.artwork);
-    }
-
-    async probeFile(path) {
-        try {
-            // Try HEAD request first
-            try {
-                const response = await fetch(path, { method: 'HEAD' });
-                return response.ok;
-            } catch (headError) {
-                // Some servers don't support HEAD, try GET instead
-                const response = await fetch(path, { method: 'GET' });
-                return response.ok;
-            }
-        } catch {
-            return false;
         }
     }
 
@@ -117,7 +89,7 @@ class ArtworkIntegration {
             return null;
         }
 
-        // Generate title from filename (remove extension, replace underscores/hyphens/spaces with spaces)
+        // Generate title from filename (remove extension, replace underscores/hyphens with spaces)
         const title = filename
             .substring(0, filename.lastIndexOf('.'))
             .replace(/[_-]/g, ' ')
@@ -136,15 +108,7 @@ class ArtworkIntegration {
         const html = `
             <div class="pix-loading">
                 <div class="section-grid pix-grid">
-                    ${Array(6).fill().map(() => `
-                        <div class="pix-item loading">
-                            <div class="pix-thumbnail-container">
-                                <div class="pix-thumbnail-skeleton"></div>
-                            </div>
-                            <h3 class="loading-text-title"></h3>
-                            <p class="loading-text-desc"></p>
-                        </div>
-                    `).join('')}
+                    ${window.UIHelpers.generateSkeletonHTML(6, 'artwork')}
                 </div>
             </div>
         `;
@@ -249,6 +213,5 @@ class ArtworkIntegration {
     }
 }
 
-// Global instance - create immediately so it's available
+// Global instance
 window.artworkIntegration = new ArtworkIntegration();
-console.log('ArtworkIntegration created:', window.artworkIntegration);

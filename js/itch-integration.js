@@ -3,9 +3,7 @@
 
 const ITCH_CONFIG = {
     username: 'snitheads',
-    profileUrl: 'https://snitheads.itch.io',
-    cacheDuration: 30 * 60 * 1000,  // 30 minutes
-    cacheKey: 'snitheads_itch_cache'
+    profileUrl: 'https://snitheads.itch.io'
 };
 
 // Demo games configuration - update with real games when published to snitheads.itch.io
@@ -45,11 +43,7 @@ class ItchIntegration {
     async fetchGames() {
         try {
             // Currently uses demo games
-            // When real games are published, replace with API call:
-            // const response = await fetch(`${this.config.profileUrl}/api/games`);
-            // const data = await response.json();
-            // this.games = data.games;
-
+            // When real games are published, replace with API call
             this.games = [...DEMO_GAMES];
             this.error = null;
             return this.games;
@@ -98,15 +92,7 @@ class ItchIntegration {
                 </div>
                 <h3 class="toys-grid-title">Games</h3>
                 <div class="section-grid toys-grid">
-                    ${Array(3).fill().map(() => `
-                        <div class="game-item loading">
-                            <div class="game-thumbnail-container">
-                                <div class="game-thumbnail-skeleton"></div>
-                            </div>
-                            <h3 class="loading-text-title"></h3>
-                            <p class="loading-text-desc"></p>
-                        </div>
-                    `).join('')}
+                    ${window.UIHelpers.generateSkeletonHTML(3, 'game')}
                 </div>
             </div>
         `;
@@ -204,20 +190,8 @@ class ItchIntegration {
             linkEl.style.display = game.embedUrl !== '#' ? 'inline-block' : 'none';
         }
 
-        // Update "Now Playing" badges
-        this.containerElement.querySelectorAll('.game-item').forEach(item => {
-            const badge = item.querySelector('.now-playing-badge');
-            if (item.dataset.gameId === gameId) {
-                if (!badge) {
-                    const newBadge = document.createElement('span');
-                    newBadge.className = 'now-playing-badge';
-                    newBadge.textContent = 'Now Playing';
-                    item.querySelector('.game-thumbnail-container').appendChild(newBadge);
-                }
-            } else {
-                if (badge) badge.remove();
-            }
-        });
+        // Update "Now Playing" badges using helper
+        window.UIHelpers.toggleNowPlayingBadge(this.containerElement, '.game-item', gameId, 'gameId');
     }
 
     // Render error state
@@ -261,15 +235,5 @@ class ItchIntegration {
     }
 }
 
-// Initialize when script loads
-let itchIntegration = null;
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        itchIntegration = new ItchIntegration();
-        window.itchIntegration = itchIntegration;
-    });
-} else {
-    itchIntegration = new ItchIntegration();
-    window.itchIntegration = itchIntegration;
-}
+// Global instance
+window.itchIntegration = new ItchIntegration();

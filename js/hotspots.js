@@ -106,8 +106,4 @@ function initHotspots() {
     hotspotManager = new HotspotManager();
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHotspots);
-} else {
-    initHotspots();
-}
+window.DOMUtils.onReady(initHotspots);

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>snitheads</title>
     <meta name="description" content="snitheads">
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="css/style.css">
     <script>
         // Redirect old hash-based URLs to new clean URLs
@@ -48,12 +49,19 @@
     </div>
 
     <!-- Scripts -->
-    <script src="js/camera-parallax.js"></script>
-    <script src="js/hotspots.js"></script>
-    <script src="js/youtube-integration.js"></script>
-    <script src="js/itch-integration.js"></script>
-    <script src="js/artwork-integration.js"></script>
-    <script src="js/music-player.js"></script>
-    <script src="js/navigation.js"></script>
+    <!-- Utilities (load first) -->
+    <script src="js/utils/dom-utils.js" defer></script>
+    <script src="js/utils/cache-manager.js" defer></script>
+    <script src="js/utils/formatters.js" defer></script>
+    <script src="js/utils/ui-helpers.js" defer></script>
+
+    <!-- Feature modules -->
+    <script src="js/camera-parallax.js" defer></script>
+    <script src="js/hotspots.js" defer></script>
+    <script src="js/youtube-integration.js" defer></script>
+    <script src="js/itch-integration.js" defer></script>
+    <script src="js/artwork-integration.js" defer></script>
+    <script src="js/music-player.js" defer></script>
+    <script src="js/navigation.js" defer></script>
 </body>
 </html>
