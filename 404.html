@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>snitheads</title>
+    <meta name="description" content="snitheads">
+</head>
+<body>
+    <script>
+        // GitHub Pages routing workaround
+        // This file is served for all 404 errors, allowing client-side routing
+        const path = window.location.pathname.slice(1); // Remove leading slash
+        sessionStorage.setItem('redirect', path);
+        window.location.href = '/';
+    </script>
+</body>
+</html>

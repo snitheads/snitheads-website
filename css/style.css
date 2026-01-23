@@ -231,10 +231,10 @@ body {
 }
 
 /* Hotspot color variants */
-.placeholder-object.cartoons { background: #2d4059; }
-.placeholder-object.cartoons.hovered { background: #3d5a80; }
-.placeholder-object.games { background: #3d5a80; }
-.placeholder-object.games.hovered { background: #4a6fa5; }
+.placeholder-object.toons { background: #2d4059; }
+.placeholder-object.toons.hovered { background: #3d5a80; }
+.placeholder-object.toys { background: #3d5a80; }
+.placeholder-object.toys.hovered { background: #4a6fa5; }
 .placeholder-object.contact { background: #4a6fa5; }
 .placeholder-object.contact.hovered { background: #5d7fb5; }
 
@@ -552,9 +552,9 @@ body {
     flex-shrink: 0;
 }
 
-/* Hotspot color variant for music */
-.placeholder-object.music { background: #4a6fa5; }
-.placeholder-object.music.hovered { background: #5d7fb5; }
+/* Hotspot color variant for tunes */
+.placeholder-object.tunes { background: #4a6fa5; }
+.placeholder-object.tunes.hovered { background: #5d7fb5; }
 
 /* Responsive Music Player */
 @media (max-width: 480px) {
@@ -1054,7 +1054,7 @@ body {
 }
 
 /* Game Grid Title */
-.games-grid-title {
+.toys-grid-title {
     font-size: 1.4rem;
     font-weight: 400;
     letter-spacing: 0.1em;
@@ -1064,7 +1064,7 @@ body {
     text-transform: uppercase;
 }
 
-.featured-game-container:first-child + .games-grid-title {
+.featured-game-container:first-child + .toys-grid-title {
     margin-top: 2rem;
 }
 
@@ -1153,7 +1153,7 @@ body {
 }
 
 /* Loading States for Games */
-.games-loading {
+.toys-loading {
     animation: fadeIn 0.3s ease;
 }
 
@@ -1208,7 +1208,7 @@ body {
 }
 
 /* Error State */
-.games-error {
+.toys-error {
     text-align: center;
     padding: 4rem 2rem;
     background: rgba(255, 255, 255, 0.03);
@@ -1216,19 +1216,19 @@ body {
     margin: 2rem 0;
 }
 
-.games-error svg {
+.toys-error svg {
     width: 64px;
     height: 64px;
     margin-bottom: 1rem;
     opacity: 0.5;
 }
 
-.games-error h3 {
+.toys-error h3 {
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
 }
 
-.games-error p {
+.toys-error p {
     color: rgba(255, 255, 255, 0.5);
     margin-bottom: 1.5rem;
 }
@@ -1254,7 +1254,7 @@ body {
 }
 
 /* Empty State */
-.games-empty {
+.toys-empty {
     text-align: center;
     padding: 4rem 2rem;
     background: rgba(255, 255, 255, 0.03);
@@ -1262,20 +1262,20 @@ body {
     color: rgba(255, 255, 255, 0.6);
 }
 
-.games-empty svg {
+.toys-empty svg {
     width: 64px;
     height: 64px;
     margin-bottom: 1rem;
     opacity: 0.5;
 }
 
-.games-empty h3 {
+.toys-empty h3 {
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
     color: #f5f5f5;
 }
 
-.games-empty p {
+.toys-empty p {
     margin-bottom: 1.5rem;
 }
 
@@ -1289,7 +1289,7 @@ body {
         width: calc(100% + 3rem);
     }
 
-    .games-grid-title {
+    .toys-grid-title {
         font-size: 1.2rem;
     }
 
@@ -1300,7 +1300,7 @@ body {
 }
 
 @media (max-width: 480px) {
-    .section-grid.games-grid {
+    .section-grid.toys-grid {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 1rem;
     }
@@ -1313,7 +1313,7 @@ body {
         font-size: 0.9rem;
     }
 
-    .games-grid-title {
+    .toys-grid-title {
         margin: 2rem 0 1rem;
     }
 

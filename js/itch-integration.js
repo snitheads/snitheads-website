@@ -92,12 +92,12 @@ class ItchIntegration {
     // Render loading skeleton UI
     renderLoadingState() {
         const html = `
-            <div class="games-loading">
+            <div class="toys-loading">
                 <div class="featured-game-loading">
                     <div class="featured-game-skeleton"></div>
                 </div>
-                <h3 class="games-grid-title">Games</h3>
-                <div class="section-grid games-grid">
+                <h3 class="toys-grid-title">Games</h3>
+                <div class="section-grid toys-grid">
                     ${Array(3).fill().map(() => `
                         <div class="game-item loading">
                             <div class="game-thumbnail-container">
@@ -128,8 +128,8 @@ class ItchIntegration {
                     </a>
                 </div>
             </div>
-            <h3 class="games-grid-title">All Games</h3>
-            <div class="section-grid games-grid">
+            <h3 class="toys-grid-title">All Games</h3>
+            <div class="section-grid toys-grid">
                 ${this.games.map(game => `
                     <div class="game-item" data-game-id="${game.id}">
                         <div class="game-thumbnail-container">
@@ -223,7 +223,7 @@ class ItchIntegration {
     // Render error state
     renderErrorState() {
         const html = `
-            <div class="games-error">
+            <div class="toys-error">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M1 21h22L12 2 1 21zm12-3h-2v2h2v-2zm0-2h-2v2h2v-2zm0-2h-2v2h2v-2z"/>
                 </svg>
@@ -246,7 +246,7 @@ class ItchIntegration {
     // Render empty state
     renderEmptyState() {
         const html = `
-            <div class="games-empty">
+            <div class="toys-empty">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
                 </svg>

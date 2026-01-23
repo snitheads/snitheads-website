@@ -6,6 +6,21 @@
     <title>snitheads</title>
     <meta name="description" content="snitheads">
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Redirect old hash-based URLs to new clean URLs
+        if (window.location.hash) {
+            const hash = window.location.hash.slice(1);
+            const redirectMap = {
+                'games': 'toys',
+                'cartoons': 'toons',
+                'music': 'tunes'
+            };
+            const newSection = redirectMap[hash];
+            if (newSection) {
+                window.location.href = window.location.origin + window.location.pathname + newSection;
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Room Container -->

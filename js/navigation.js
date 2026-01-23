@@ -2,10 +2,10 @@
 // Handles transitions between room and content sections
 
 const SECTION_CONTENT = {
-    games: {
-        title: 'Games',
+    toys: {
+        title: 'Toys',
         content: `
-            <h2>Games</h2>
+            <h2>Toys</h2>
             <p>Play interactive experiences created by Snitheads. Explore our collection of games on itch.io.</p>
             <div id="games-content">
                 <!-- Games loaded dynamically by itch-integration.js -->
@@ -17,10 +17,10 @@ const SECTION_CONTENT = {
             }
         }
     },
-    cartoons: {
-        title: 'Cartoons',
+    toons: {
+        title: 'Toons',
         content: `
-            <h2>Cartoons</h2>
+            <h2>Toons</h2>
             <p>Watch our animated creations. From short films to series, explore the world of Snitheads animation.</p>
             <div id="cartoons-content">
                 <!-- Videos loaded dynamically by youtube-integration.js -->
@@ -32,10 +32,10 @@ const SECTION_CONTENT = {
             }
         }
     },
-    music: {
-        title: 'Music',
+    tunes: {
+        title: 'Tunes',
         content: `
-            <h2>Music</h2>
+            <h2>Tunes</h2>
             <p>Listen to the Snitheads soundtrack.</p>
             <div class="music-player">
                 <div class="now-playing">
@@ -131,9 +131,25 @@ class NavigationController {
     }
 
     handleInitialRoute() {
-        const hash = window.location.hash.slice(1);
-        if (hash && SECTION_CONTENT[hash]) {
-            setTimeout(() => this.showSection(hash, false), 100);
+        // Check if redirected from 404.html
+        const redirectPath = sessionStorage.getItem('redirect');
+        if (redirectPath) {
+            sessionStorage.removeItem('redirect');
+            const match = redirectPath.match(/^(toys|toons|tunes)\/?$/);
+            if (match) {
+                const sectionId = match[1];
+                history.replaceState({ section: sectionId }, '', `/${sectionId}`);
+                setTimeout(() => this.showSection(sectionId, false), 100);
+                return;
+            }
+        }
+
+        // Handle direct visits to section paths
+        const pathname = window.location.pathname;
+        const match = pathname.match(/\/(toys|toons|tunes)\/?$/);
+        const sectionId = match ? match[1] : null;
+        if (sectionId && SECTION_CONTENT[sectionId]) {
+            setTimeout(() => this.showSection(sectionId, false), 100);
         }
     }
 
@@ -150,7 +166,7 @@ class NavigationController {
 
         // Update URL
         if (pushState) {
-            history.pushState({ section: sectionId }, '', `#${sectionId}`);
+            history.pushState({ section: sectionId }, '', `/${sectionId}`);
         }
 
         // Load content

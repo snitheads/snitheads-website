@@ -2,37 +2,37 @@
 // Positions are percentages relative to the room image
 const HOTSPOTS = [
     {
-        id: 'cartoons',
-        label: 'Cartoons',
-        section: 'cartoons',
+        id: 'toons',
+        label: 'Toons',
+        section: 'toons',
         x: 20,
         y: 40,
         width: 120,
         height: 150,
         icon: '📺',
-        description: 'Watch our cartoons'
+        description: 'Watch our toons'
     },
     {
-        id: 'games',
-        label: 'Games',
-        section: 'games',
+        id: 'toys',
+        label: 'Toys',
+        section: 'toys',
         x: 50,
         y: 45,
         width: 100,
         height: 80,
         icon: '🎮',
-        description: 'Play our games'
+        description: 'Play our toys'
     },
     {
-        id: 'music',
-        label: 'Music',
-        section: 'music',
+        id: 'tunes',
+        label: 'Tunes',
+        section: 'tunes',
         x: 80,
         y: 40,
         width: 90,
         height: 120,
         icon: '🎵',
-        description: 'Listen to music'
+        description: 'Listen to tunes'
     }
 ];
 
