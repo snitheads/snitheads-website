@@ -2,6 +2,21 @@
 // Handles transitions between room and content sections
 
 const SECTION_CONTENT = {
+    pix: {
+        title: 'Pix',
+        content: `
+            <h2>Pix</h2>
+            <p>Explore artwork and illustrations from the Snitheads universe.</p>
+            <div id="pix-content">
+                <!-- Artwork loaded dynamically by artwork-integration.js -->
+            </div>
+        `,
+        onLoad: () => {
+            if (window.artworkIntegration) {
+                window.artworkIntegration.initialize();
+            }
+        }
+    },
     toys: {
         title: 'Toys',
         content: `
@@ -135,7 +150,7 @@ class NavigationController {
         const redirectPath = sessionStorage.getItem('redirect');
         if (redirectPath) {
             sessionStorage.removeItem('redirect');
-            const match = redirectPath.match(/^(toys|toons|tunes)\/?$/);
+            const match = redirectPath.match(/^(pix|toys|toons|tunes)\/?$/);
             if (match) {
                 const sectionId = match[1];
                 history.replaceState({ section: sectionId }, '', `/${sectionId}`);
@@ -146,7 +161,7 @@ class NavigationController {
 
         // Handle direct visits to section paths
         const pathname = window.location.pathname;
-        const match = pathname.match(/\/(toys|toons|tunes)\/?$/);
+        const match = pathname.match(/\/(pix|toys|toons|tunes)\/?$/);
         const sectionId = match ? match[1] : null;
         if (sectionId && SECTION_CONTENT[sectionId]) {
             setTimeout(() => this.showSection(sectionId, false), 100);
