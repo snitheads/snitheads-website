@@ -6,20 +6,16 @@ const SECTION_CONTENT = {
         title: 'Games',
         content: `
             <h2>Games</h2>
-            <p>Welcome to our games collection. Here you'll find interactive experiences created by Snitheads.</p>
-            <div class="section-grid">
-                <div class="section-item">
-                    <div class="item-placeholder">Coming Soon</div>
-                    <h3>Game 1</h3>
-                    <p>Description of the first game.</p>
-                </div>
-                <div class="section-item">
-                    <div class="item-placeholder">Coming Soon</div>
-                    <h3>Game 2</h3>
-                    <p>Description of the second game.</p>
-                </div>
+            <p>Play interactive experiences created by Snitheads. Explore our collection of games on itch.io.</p>
+            <div id="games-content">
+                <!-- Games loaded dynamically by itch-integration.js -->
             </div>
-        `
+        `,
+        onLoad: () => {
+            if (window.itchIntegration) {
+                window.itchIntegration.initialize();
+            }
+        }
     },
     cartoons: {
         title: 'Cartoons',
